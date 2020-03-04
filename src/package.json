@@ -30,6 +30,7 @@
     "node": "node server.js",
     "server": "nodemon server.js",
     "client": "react-app-rewired start",
+    "start": "react-app-rewired start",
     "all": "concurrently \"npm run server\" \"npm run client\"",
     "postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
     "build": "react-app-rewired build",

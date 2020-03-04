@@ -3,11 +3,18 @@ import defaultPattern from '../../config/defaultPattern'
 import useKey from '../../hooks/useKey'
 import useSocket from '../../hooks/useSocket'
 import Board from '../../components/Board'
+import classes from './classes.module.css'
 
-const GameManager = () => {
+const Panel = ({room, player}) => {
+  return (<div><h4>{room}</h4> <h4>{player}</h4></div>)
+}
+
+const GameManager = ({hashParams}) => {
   const [pattern, setPattern] = useState(defaultPattern);
   const [keyPressed] = useKey();
   const [socket] = useSocket();
+  const [player, setPlayer] = useState(hashParams.name);
+  const [room, setRoom] = useState(hashParams.room);
 
   const image = pattern.flat();
 
@@ -27,8 +34,11 @@ const GameManager = () => {
     }
   }, [keyPressed])
 
-  return (  
+  return (
+    <div className={classes.game}>
+      <Panel room={room} player={player} />
       <Board image={image} />
+    </div>
   );
 };
 
