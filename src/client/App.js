@@ -1,10 +1,17 @@
 import React from "react";
-import Board from "./containers/Board";
+import GameManager from "./containers/GameManager";
+import useHashRoute from "./hooks/useHashRoute";
+import Lobby from './containers/Lobby'
+
 
 const App = () => {
+  const hashRoute = useHashRoute(); 
+
   return (
     <div className="app">
-      <Board />
+    {
+      hashRoute ? <GameManager hashRoute={hashRoute}/> : <Lobby />
+    }
     </div>
   );
 };

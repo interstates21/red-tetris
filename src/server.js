@@ -82,6 +82,8 @@ const pattern = [
   ];
 
 
+  // export const emitToRoom = (io, roomName, type, name, body) => io.to(roomName).emit(type, { name, body: omit(['intv', 'intvId'],body) });
+
   const updatePattern = (pattern) => {
     pattern.unshift(pattern.pop());
     return (pattern);

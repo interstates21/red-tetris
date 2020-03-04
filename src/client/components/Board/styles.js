@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CELL_SIZE, CELL_MARGIN } from "../../constants";
+import { CELL_SIZE, CELL_MARGIN } from "../../config";
 
 
 export const BoardContainer = styled.div`

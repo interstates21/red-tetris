@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CELL_SIZE, CELL_MARGIN } from "../../constants";
+import { CELL_SIZE, CELL_MARGIN } from "../../config";
 
 export const StyledCell = styled.div`
   display: flex;
@@ -11,9 +11,3 @@ export const StyledCell = styled.div`
   border-radius: 3px;
   opacity: ${props => props.opacity};
 `;
-
-// @media only screen and (max-width: 500px) {
-//     width:${SMALL_CELL_SIZE}px;
-//     height:${SMALL_CELL_SIZE}px;
-//     margin: ${CELL_MARGIN}px;
-// }
