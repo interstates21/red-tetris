@@ -76,6 +76,10 @@ const updatePattern = pattern => {
 };
 
 io.on("connection", function(socket) {
+  socket.on(eventTypes.CREATE_ROOM, function(room) {
+    console.log("jointin room " + room);
+    socket.join(room);
+  });
   interval = setInterval(
     () => socket.emit(eventTypes.TIME, { pattern: updatePattern(pattern) }),
     1000

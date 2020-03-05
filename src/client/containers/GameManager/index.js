@@ -6,6 +6,7 @@ import Board from "../../components/Board";
 import classes from "./classes.module.css";
 import eventTypes from "../../../config/socketEvents";
 import { emmit } from "../../helpers/emmiters";
+import Lobby from "../Lobby";
 
 const Panel = ({ room, player }) => {
   return (
@@ -19,8 +20,8 @@ const GameManager = ({ hashParams }) => {
   const [pattern, setPattern] = useState(defaultPattern);
   const [keyPressed] = useKey();
   const [socket] = useSocket();
-  const [player, setPlayer] = useState(hashParams.name);
-  const [room, setRoom] = useState(hashParams.room);
+  // const [player, setPlayer] = useState(hashParams.name);
+  // const [room, setRoom] = useState(hashParams.room);
 
   const image = pattern.flat();
 
@@ -48,11 +49,20 @@ const GameManager = ({ hashParams }) => {
       socket.emit(eventTypes.MOVEMENT, { key: keyPressed });
       // emmit(socket, room, MOVEMENT, { key: keyPressed });
     }
-  }, [keyPressed]);
+  }, [keyPressed, socket]);
 
+  const createRoom = () => {
+    if (!socket) return;
+    console.log("socket = ", socket);
+    socket.emit(eventTypes.CREATE_ROOM, "room1");
+  };
+
+  if (!hashParams) {
+    return <Lobby onCreateRoom={createRoom} />;
+  }
   return (
     <div className={classes.game}>
-      <Panel room={room} player={player} />
+      {/* <Panel room={room} player={player} /> */}
       <Board image={image} />
     </div>
   );

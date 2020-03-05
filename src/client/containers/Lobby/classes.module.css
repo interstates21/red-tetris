@@ -52,12 +52,18 @@
   color: yellow;
   /* margin-top: 10px; */
   cursor: pointer;
-  transition: 500ms opacity;
+  transition: 800ms border;
 }
 
 .room:hover {
   opacity: 1;
   background: yellow;
+  border-left: 12px solid yellow;
+  border-right: 12px solid yellow;
+}
+
+.buttonNew:hover {
+  opacity: 1;
   border-left: 12px solid yellow;
   border-right: 12px solid yellow;
 }

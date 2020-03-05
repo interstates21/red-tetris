@@ -16,7 +16,7 @@ const rooms = [
     id: 85
   }
 ];
-const Lobby = () => {
+const Lobby = ({ onCreateRoom }) => {
   const [name, setName] = useState("");
   const nameReg = /^[a-zA-Z0-9]+$/;
   const enterRoom = roomID => {
@@ -39,7 +39,9 @@ const Lobby = () => {
               </h4>
             ))}
           </div>
-          <div className={classes.buttonNew}>NEW ROOM</div>
+          <div className={classes.buttonNew} onClick={onCreateRoom}>
+            NEW ROOM
+          </div>
         </div>
       )}
     </div>
