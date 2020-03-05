@@ -1,15 +1,21 @@
-import React, {useState, useEffect} from "react";
-import defaultPattern from '../../config/defaultPattern'
-import useKey from '../../hooks/useKey'
-import useSocket from '../../hooks/useSocket'
-import Board from '../../components/Board'
-import classes from './classes.module.css'
+import React, { useState, useEffect } from "react";
+import defaultPattern from "../../config/defaultPattern";
+import useKey from "../../hooks/useKey";
+import useSocket from "../../hooks/useSocket";
+import Board from "../../components/Board";
+import classes from "./classes.module.css";
+import eventTypes from "../../../config/socketEvents";
+import { emmit } from "../../helpers/emmiters";
 
-const Panel = ({room, player}) => {
-  return (<div><h4>{room}</h4> <h4>{player}</h4></div>)
-}
+const Panel = ({ room, player }) => {
+  return (
+    <div>
+      <h4>{room}</h4> <h4>{player}</h4>
+    </div>
+  );
+};
 
-const GameManager = ({hashParams}) => {
+const GameManager = ({ hashParams }) => {
   const [pattern, setPattern] = useState(defaultPattern);
   const [keyPressed] = useKey();
   const [socket] = useSocket();
@@ -18,21 +24,31 @@ const GameManager = ({hashParams}) => {
 
   const image = pattern.flat();
 
-  const isMovement = (e) => {
-    return (e === 'ArrowLeft' || e === 'ArrowRight' || e === 'ArrowUp' || e === 'ArrowDown')
-  }
-  useEffect(() => {
-    if (!socket) return ;
-      socket.on("time", data => setPattern(data.pattern))
-  }, [socket])
+  const isMovement = e => {
+    return (
+      e === "ArrowLeft" ||
+      e === "ArrowRight" ||
+      e === "ArrowUp" ||
+      e === "ArrowDown"
+    );
+  };
 
   useEffect(() => {
-    if (!socket) return ;
+    if (!socket) return;
+    socket.on(eventTypes.CONNECTION, () => {
+      console.log("hello");
+    });
+    socket.on(eventTypes.TIME, data => setPattern(data.pattern));
+  }, [socket]);
+
+  useEffect(() => {
+    if (!socket) return;
     if (isMovement(keyPressed)) {
-      console.log('keyPressed = ', keyPressed)
-      socket.emit('movement', {key: keyPressed});
+      console.log("keyPressed = ", keyPressed);
+      socket.emit(eventTypes.MOVEMENT, { key: keyPressed });
+      // emmit(socket, room, MOVEMENT, { key: keyPressed });
     }
-  }, [keyPressed])
+  }, [keyPressed]);
 
   return (
     <div className={classes.game}>

@@ -28,7 +28,6 @@ const Lobby = () => {
       <MyInput value={name} onChangeText={setName} name={"Username"} />
       {nameReg.test(name) && (
         <div className={classes.box}>
-          <div className={classes.buttonNew}>Create Room</div>
           <div className={classes.rooms}>
             {rooms.map(e => (
               <h4
@@ -40,6 +39,7 @@ const Lobby = () => {
               </h4>
             ))}
           </div>
+          <div className={classes.buttonNew}>NEW ROOM</div>
         </div>
       )}
     </div>
