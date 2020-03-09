@@ -4,7 +4,6 @@ const useKey = () => {
     const [key, setKey] = useState(null);
   
     const handler = (event) => {
-      console.log('event === ' , event);
       setKey(event.key);
     }
     useEffect(() => {

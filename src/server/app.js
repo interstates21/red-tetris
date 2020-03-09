@@ -26,7 +26,7 @@ class SocketIOServer {
 
   run() {
     this.http.listen(this.port, () => {
-      console.log(`Example app listening at port ${this.port}`);
+      console.log(`Red Tetris is listening on port ${this.port}`);
     });
   }
 }

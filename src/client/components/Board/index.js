@@ -1,6 +1,5 @@
 import React from "react";
 import Cell from "../Cell";
-import { BoardContainer } from "./styles";
 import styled from "styled-components";
 
 export const StyledStage = styled.div`
@@ -22,12 +21,6 @@ const Board = ({ stage }) => {
     <StyledStage width={stage[0].length} height={stage.length}>
       {stage.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]} />))}
     </StyledStage>
-    // <BoardContainer>
-    //   {image.map(row => row.map((cell, x) => <Cell key={x} type={cell[0]} />))}
-    //   {/* {image.map(n => (
-    //     <Cell n={n} />
-    //   ))} */}
-    // </BoardContainer>
   );
 };
 
