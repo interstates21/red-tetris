@@ -47,21 +47,21 @@ export const StyledTetris = styled.div`
 
 const GameManager = ({ hashParams }) => {
   // const [pattern, setPattern] = useState(defaultPattern());
-  // const [keyPressed] = useKey();
+  const [keyPressed] = useKey();
   const [socket] = useSocket();
   // const [player, setPlayer] = useState(hashParams.name);
   // const [room, setRoom] = useState(hashParams.room);
 
   // const image = pattern.flat();
 
-  // const isMovement = e => {
-  //   return (
-  //     e === "ArrowLeft" ||
-  //     e === "ArrowRight" ||
-  //     e === "ArrowUp" ||
-  //     e === "ArrowDown"
-  //   );
-  // };
+  const isMovement = e => {
+    return (
+      e === "ArrowLeft" ||
+      e === "ArrowRight" ||
+      e === "ArrowUp" ||
+      e === "ArrowDown"
+    );
+  };
 
   // useEffect(() => {
   //   if (!socket) return;
@@ -74,14 +74,14 @@ const GameManager = ({ hashParams }) => {
   //   socket.on(eventTypes.TIME, data => setPattern(data.pattern));
   // }, [socket]);
 
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   if (isMovement(keyPressed)) {
-  //     console.log("keyPressed = ", keyPressed);
-  //     socket.emit(eventTypes.MOVEMENT, { key: keyPressed });
-  //     // emmit(socket, room, MOVEMENT, { key: keyPressed });
-  //   }
-  // }, [keyPressed]);
+  useEffect(() => {
+    if (!socket) return;
+    if (isMovement(keyPressed)) {
+      console.log("keyPressed = ", keyPressed);
+      socket.emit(eventTypes.MOVEMENT, { key: keyPressed });
+      // emmit(socket, room, MOVEMENT, { key: keyPressed });
+    }
+  }, [keyPressed]);
 
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
