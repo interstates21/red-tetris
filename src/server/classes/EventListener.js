@@ -6,21 +6,21 @@ class EventListener {
   }
 
   listenMovement() {
-    this.socket.on(eventTypes.MOVEMENT, data => {
-      console.log("Received key =  " + data.key);
+    return new Promise(resolve => {
+      this.socket.on(eventTypes.MOVEMENT, (sender, data) => {
+        console.log("data", data);
+        resolve({ sender, data });
+      });
     });
   }
 
-  // listenMovement() {
-  //   this.socket.on(
-  //     eventTypes.JOIN_ROOM, () => Player.joinRoom();
-  //   );
-  // }
-  // listenDisconnect() {
-  //   this.socket.on("disconnect", function() {
-  //     this.io.emit("user disconnected");
-  //   });
-  // }
+  listenJoinRoom() {
+    return new Promise(resolve => {
+      this.socket.on(eventTypes.JOIN_ROOM, (sender, data) => {
+        resolve({ sender, data });
+      });
+    });
+  }
 }
 
 module.exports = EventListener;

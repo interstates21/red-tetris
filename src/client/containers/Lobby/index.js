@@ -2,21 +2,7 @@ import React, { useState } from "react";
 import classes from "./classes.module.css";
 import MyInput from "../../components/MyInput";
 
-const rooms = [
-  {
-    id: 1
-  },
-  {
-    id: 34
-  },
-  {
-    id: 52
-  },
-  {
-    id: 85
-  }
-];
-const Lobby = ({ onCreateRoom }) => {
+const Lobby = ({ onCreateRoom, rooms }) => {
   const [name, setName] = useState("");
   const nameReg = /^[a-zA-Z0-9]+$/;
   const enterRoom = roomID => {

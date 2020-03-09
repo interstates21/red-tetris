@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 // import { StyledCell } from "./styles";
-import { TETROMINOS } from "../../config/tetrominoes";
+import { ITEMS } from "../../../config/Items";
 
 const StyledCell = styled.div`
   width: auto;
@@ -20,7 +20,7 @@ const Cell = ({ type }) => {
   // }, [n]);
 
   return (
-    <StyledCell type={type} color={TETROMINOS[type].color}>
+    <StyledCell type={type} color={ITEMS[type].color}>
       {console.log("rerender cell")}
     </StyledCell>
   );

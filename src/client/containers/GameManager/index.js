@@ -41,6 +41,7 @@ export const StyledTetris = styled.div`
 
 const GameManager = ({ hashParams }) => {
   const [keyPressed] = useKey();
+  const [rooms, setRooms] = useState([]);
   const [socket] = useSocket();
   const [pattern, setPattern] = useState(getDefaultPattern());
 
@@ -67,7 +68,7 @@ const GameManager = ({ hashParams }) => {
   const createRoom = () => {
     if (!socket) return;
     console.log("socket = ", socket);
-    socket.emit(eventTypes.CREATE_ROOM, "room1");
+    socket.emit(eventTypes.CREATE_ROOM);
   };
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const GameManager = ({ hashParams }) => {
   }, [keyPressed, socket]);
 
   if (!hashParams) {
-    return <Lobby onCreateRoom={createRoom} />;
+    return <Lobby onCreateRoom={createRoom} rooms={rooms} />;
   }
 
   const startGame = () => {};
