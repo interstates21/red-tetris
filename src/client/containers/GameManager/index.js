@@ -41,7 +41,7 @@ export const StyledTetris = styled.div`
 
 const GameManager = ({ hashParams }) => {
   const [keyPressed] = useKey();
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState({});
   const [socket] = useSocket();
   const [pattern, setPattern] = useState(getDefaultPattern());
 
@@ -54,21 +54,30 @@ const GameManager = ({ hashParams }) => {
     );
   };
 
-  // useEffect(() => {
-  //   if (!socket) return;
-  //   socket.on(eventTypes.CONNECTION, () => {
-  //     console.log("hello");
-  //   });
-  //   //socket.on(eventTypes.TIME, data => setPattern(data.pattern));
-  //   // newTetromino
+  const eventListener = () => {
+    if (!socket) {
+      return;
+    }
+    socket.on(eventTypes.CREATE_ROOM_SUCCESS, data => {
+      console.log("rooms = ", data);
+      setRooms(data.rooms);
+    });
+  };
 
-  //   socket.on(eventTypes.TIME, data => setPattern(data.pattern));
-  // }, [socket]);
+  useEffect(() => {
+    eventListener();
+  }, [socket]);
 
-  const createRoom = () => {
+  const createRoom = ({ name }) => {
     if (!socket) return;
     console.log("socket = ", socket);
-    socket.emit(eventTypes.CREATE_ROOM);
+    socket.emit(eventTypes.CREATE_ROOM, { name });
+  };
+
+  const joinRoom = ({ name, roomID }) => {
+    if (!socket) return;
+    console.log("socket = ", socket);
+    socket.emit(eventTypes.CREATE_ROOM, { name });
   };
 
   useEffect(() => {

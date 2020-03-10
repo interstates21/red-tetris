@@ -18,10 +18,8 @@ class SocketIOServer {
   }
 
   initIO() {
-    this.io.on(eventTypes.CONNECTION, socket => {
-      this.gameManager = new GameManager(socket);
-      this.gameManager.run();
-    });
+    this.gameManager = new GameManager(this.io);
+    this.gameManager.run();
   }
 
   run() {
