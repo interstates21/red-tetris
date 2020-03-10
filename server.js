@@ -10,4 +10,4 @@ let server = new SocketIOServer(port, app, http, io);
 // server.initDb();
 
 server.run();
-server.initIO();
+server.game();

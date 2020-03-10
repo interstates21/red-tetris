@@ -16,7 +16,7 @@ class SocketIOServer {
     // database.connect();
   }
 
-  initIO() {
+  game() {
     this.gameManager = new GameManager(this.io);
     this.gameManager.run();
   }

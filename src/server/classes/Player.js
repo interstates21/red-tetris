@@ -28,12 +28,12 @@ class Player {
 
   updatePos() {}
 
-  drop() {
-    this.updatePos(new Vector2(0, 1));
+  move(v) {
+    this.updatePos(v.x, v.y);
   }
 
-  move(dir) {
-    this.updatePos(new Vector2(dir, 0));
+  rotete() {
+    
   }
 }
 

@@ -7,18 +7,14 @@ class GameManager {
   constructor(io) {
     this.clients = new Map();
     this.io = io;
-    this.pattern = defaultPattern();
     this.rooms = {};
     this.nRooms = 0;
-    this.ended = false;
-    this.dropTime = 1000;
   }
 
   startGame({ roomID }) {
+    console.log(`Starting Game in ${roomID}`, this.rooms);
     this.rooms[roomID].startGame();
   }
-
-  moveManager({ socket, data }) {}
 
   clientManager({ socket }) {
     console.info(`Client connected unknown id=${socket.id}`);
@@ -91,12 +87,6 @@ class GameManager {
   run() {
     this.io.on(eventTypes.CONNECTION, socket => {
       this.clientManager({ socket });
-
-      socket.on(eventTypes.MOVEMENT, data => {
-        console.log("MOVEMENT", data);
-        this.moveManager({ socket, data });
-      });
-
       socket.on(eventTypes.CREATE_ROOM, data => {
         console.log("CREATE_ROOM", data);
         this.createRoomManager({ socket, data });

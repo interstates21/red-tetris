@@ -1,4 +1,5 @@
 const eventTypes = require("../../config/socketEvents");
+const Vector2 = require('./Vector2');
 
 class Room {
   constructor({ host, id }) {
@@ -7,6 +8,8 @@ class Room {
     this.ended = true;
     // this.players = [host];
     this.dropTime = 1000;
+    // this.pattern = defaultPattern();
+    this.items = ['IJLOSTZ']
   }
 
   join(player) {
@@ -25,9 +28,22 @@ class Room {
     };
   }
 
+  eventListener() {
+    this.players.forEach(p => {
+      p.socket.on(eventTypes.MOVEMENT, ({key}) => {
+        console.log(`Moving Player ${p.name}`)
+        if (key === 'ArrowUp') {
+          p.rotate();
+        }
+        p.move(new Vector2(key))
+      })
+    });
+  }
+
   startGame() {
     this.ended = false;
     this.emitPlayers(eventTypes.NOTIFICATION, { message: "The Game starts!" });
+    this.eventListener();
   }
 }
 
