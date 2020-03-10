@@ -49,10 +49,6 @@ const GameManager = ({ hashParams }) => {
     if (!socket) {
       return;
     }
-    socket.on(eventTypes.CREATE_ROOM_SUCCESS, data => {
-      console.log("CREATE_ROOM_SUCCESS = ", data);
-      setRooms(data.rooms);
-    });
 
     socket.on(eventTypes.JOIN_ROOM_SUCCESS, data => {
       console.log("JOIN_ROOM_SUCCESS = ", data);
@@ -60,9 +56,10 @@ const GameManager = ({ hashParams }) => {
       setRooms(data.rooms);
     });
 
-    socket.on(eventTypes.NOTIFICATION, ({ message, ...rest }) => {
-      console.log("NOTIFICATION = ", message);
-      if (rest.rooms) {
+    socket.on(eventTypes.GAME_UPDATE, data => {
+      const {rooms} = data;
+      console.log("GAME UPDATE = ", data);
+      if (rooms) {
         setRooms(rooms);
       }
     });

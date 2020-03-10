@@ -5,7 +5,7 @@ class Room {
   constructor({ host, id }) {
     this.id = id;
     this.players = [host];
-    this.ended = true;
+    this.started = false;
     // this.players = [host];
     this.dropTime = 1000;
     // this.pattern = defaultPattern();
@@ -22,9 +22,10 @@ class Room {
 
   toObject() {
     return {
-      post: this.pos,
+      pos: this.pos,
       id: this.id,
-      players: this.players.map(e => e.toObject())
+      started: this.started,
+      players: this.players.map((e, index) => e.toObject({isOwner: index === 0 ? true : false}))
     };
   }
 
@@ -41,8 +42,8 @@ class Room {
   }
 
   startGame() {
-    this.ended = false;
-    this.emitPlayers(eventTypes.NOTIFICATION, { message: "The Game starts!" });
+    this.started = true;
+    this.emitPlayers(eventTypes.GAME_UPDATE, { message: "The Game starts!" });
     this.eventListener();
   }
 }

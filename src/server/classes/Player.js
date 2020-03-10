@@ -14,11 +14,12 @@ class Player {
     this.rows = 0;
   }
 
-  toObject() {
+  toObject({isOwner}) {
     return {
       pos: this.pos,
       id: this.socket.id,
-      name: this.name
+      name: this.name,
+      isOwner
     };
   }
 
@@ -33,7 +34,7 @@ class Player {
   }
 
   rotete() {
-    
+
   }
 }
 
