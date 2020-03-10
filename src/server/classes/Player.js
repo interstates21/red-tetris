@@ -33,7 +33,7 @@ class Player {
     this.updatePos(v.x, v.y);
   }
 
-  rotete() {
+  rotate() {
 
   }
 }

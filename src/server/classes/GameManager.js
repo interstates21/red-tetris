@@ -1,6 +1,5 @@
 const Room = require("./Room");
 const Player = require("./Player");
-const defaultPattern = require("../../config/defaultPattern");
 const eventTypes = require("../../config/socketEvents");
 
 class GameManager {
@@ -11,7 +10,6 @@ class GameManager {
     this.nRooms = 0;
   }
 
-
   emitError(socket, message) {
     socket.emit(eventTypes.GAME_ERROR, {
       message,
@@ -19,7 +17,8 @@ class GameManager {
     });
   }
 
-  emitUpdateAll(message, payload={}) {
+  emitUpdateAll(message, payload = {}) {
+    // todo ::: broadcast!!!
     this.io.emit(eventTypes.GAME_UPDATE, {
       message: message,
       rooms: this.getRoomsArray(),
@@ -27,7 +26,7 @@ class GameManager {
     });
   }
 
-  emitUpdateUser(socket, message, payload={}) {
+  emitUpdateUser(socket, message, payload = {}) {
     socket.emit(eventTypes.GAME_UPDATE, {
       message: message,
       rooms: this.getRoomsArray(),
@@ -37,10 +36,7 @@ class GameManager {
 
   startGame({ roomID }) {
     console.log(`Starting Game in ${roomID}`, this.rooms);
-    this.io.emit(eventTypes.GAME_UPDATE, {
-      message: `Starting Game in ${roomID}`,
-      rooms: this.getRoomsArray()
-    });
+    this.emitUpdateAll(`Starting Game in ${roomID}`);
     this.rooms[roomID].startGame();
   }
 
@@ -48,13 +44,11 @@ class GameManager {
     this.clients.set(socket.id, { socket, name: "incognito", room: null });
     console.info(`Client connected incognito id=${socket.id}`);
 
-    this.emitUpdateUser(socket, `You are connected!`, {currentRoom: null});
-  
+    this.emitUpdateUser(socket, `You are connected!`, { currentRoom: null });
+
     socket.on(eventTypes.DISCONNECT, () => {
-      const client = this.clients.get(socket.id)
-      console.info(
-        `Client gone [id=${socket.id} name=${client.name}]`
-      );
+      const client = this.clients.get(socket.id);
+      console.info(`Client gone [id=${socket.id} name=${client.name}]`);
       if (client.room) {
         client.room.removePlayer(client.name);
       }
@@ -64,63 +58,59 @@ class GameManager {
     });
   }
 
-  createRoomManager({ socket, data }) { // identify a client
+  createRoomManager({ socket, data }) {
+    // identify a client
 
     const newRoomID = this.nRooms;
 
     if (this.duplicateUserExists(socket, data.name)) {
-      return ;
+      return;
     }
 
     const newPlayer = new Player({
       name: data.name,
       socket: this.clients.get(socket.id).socket
     });
-
 
     const newRoom = new Room({ id: newRoomID, host: newPlayer });
     this.clients.set(socket.id, { socket, name: data.name, room: newRoom });
     this.rooms[newRoomID] = newRoom;
     this.nRooms++;
 
-
-    this.emitUpdateAll(`${data.name} CREATES room ${newRoomID}`, {newRoomID});  
+    this.emitUpdateAll(`${data.name} CREATES room ${newRoomID}`, { newRoomID });
     socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
-      currentRoom: newRoom.toObject(),
+      currentRoom: newRoom.toObject()
     });
   }
 
-
-  duplicateUserExists (socket, name)  {
-    this.clients.forEach((client) => {
+  duplicateUserExists(socket, name) {
+    this.clients.forEach(client => {
       if (client.name === name) {
         console.log("duplicate!!!");
         this.emitError(socket, "The username exists :(");
-        return (true);
+        return true;
       }
-    })
+    });
 
-    return (false)
+    return false;
   }
-
 
   joinRoomManager({ socket, data }) {
     const newPlayer = new Player({
       name: data.name,
       socket: this.clients.get(socket.id).socket
     });
-    
+
     // errors //
     const currentRoom = this.rooms[data.roomID];
     if (this.duplicateUserExists(socket, data.name)) {
-      return ;
+      return;
     }
     this.clients.set(socket.id, { socket, name: data.name, room: currentRoom });
     currentRoom.join(newPlayer);
-    const rooms = this.getRoomsArray();
     this.emitUpdateAll(`${data.name} joins room ${data.roomID}`);
     socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
-      currentRoom: currentRoom.toObject(),
+      currentRoom: currentRoom.toObject()
     });
   }
 
