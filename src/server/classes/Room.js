@@ -7,22 +7,15 @@ const defaultPattern = require("../../config/defaultPattern");
 // };
 
 class Room {
-  constructor(socket) {
-    this.socket = socket;
+  constructor(host) {
     // this.eventListener = new EventListener(socket);
-    this.players = {};
+    this.players = [host];
     this.ended = true;
+    // this.players = [host];
     this.dropTime = 1000;
   }
 
-  join(player) {
-    const { id } = player;
-    if (!this.players[id]) {
-      this.players[id] = player;
-    } else {
-      //error
-    }
-  }
+  join(player) {}
 
   run() {
     this.ended = false;

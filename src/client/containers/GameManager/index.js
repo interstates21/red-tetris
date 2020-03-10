@@ -41,7 +41,7 @@ export const StyledTetris = styled.div`
 
 const GameManager = ({ hashParams }) => {
   const [keyPressed] = useKey();
-  const [rooms, setRooms] = useState({});
+  const [rooms, setRooms] = useState([]);
   const [socket] = useSocket();
   const [pattern, setPattern] = useState(getDefaultPattern());
 

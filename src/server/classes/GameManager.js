@@ -1,4 +1,6 @@
 const EventListener = require("./EventListener");
+const Room = require("./Room");
+const Player = require("./Player");
 const defaultPattern = require("../../config/defaultPattern");
 const eventTypes = require("../../config/socketEvents");
 
@@ -32,13 +34,15 @@ class GameManager {
     this.io.emit(event, data);
   }
 
+  roomsToArray() {
+    return Object.keys(this.rooms).map(r => ({ id: r, data: {} }));
+  }
+
   run() {
     this.io.on(eventTypes.CONNECTION, socket => {
-      console.info(`Client connected [id=${socket.id}`);
-      this.clients.set(socket.id, "unknown");
-      // initialize this client's sequence number
+      console.info(`Client connected unknown id=${socket.id}`);
 
-      // when socket disconnects, remove it from the list:
+      this.clients.set(socket.id, { socket, name: "unknown" });
       socket.on(eventTypes.DISCONNECT, () => {
         console.info(
           `Client gone [id=${socket.id} name=${this.clients[socket.id]}]`
@@ -47,19 +51,22 @@ class GameManager {
       });
 
       socket.on(eventTypes.MOVEMENT, data => {
-        console.log("data", data);
+        console.log("movement", data);
       });
 
       socket.on(eventTypes.CREATE_ROOM, data => {
-        this.clients.set(socket.id, data.name); // identify a client
-        // console.log("clients =  ", this.clients);
+        this.clients.set(socket.id, { socket, name: data.name }); // identify a client
         const newRoomID = this.nRooms;
-        this.rooms[newRoomID] = true;
+        const newPlayer = new Player({
+          name: data.name,
+          socket: this.clients.get(socket.id).socket
+        });
+        this.rooms[newRoomID] = new Room(newPlayer);
         this.nRooms++;
-        console.log("rooms =  ", this.rooms);
+
         this.emitAllClients(eventTypes.CREATE_ROOM_SUCCESS, {
           message: "Room Successfully Created",
-          rooms: this.rooms,
+          rooms: this.roomsToArray(this.rooms),
           newRoomID
         });
       });

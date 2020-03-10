@@ -2,7 +2,9 @@ const Factory = require("./Factory");
 const Vector2 = require("./Vector2");
 
 class Player {
-  constructor() {
+  constructor({ name, socket }) {
+    this.name = name;
+    this.socket = socket;
     this.yOffset = 0;
     this.pos = { x: 0, y: this.yOffset };
     // this.activeItem = Factory.generateItem();
@@ -25,7 +27,6 @@ class Player {
 
 module.exports = Player;
 
-
 // joinRoom(socket, io, data, rooms, currentSocketId) {
 //     const { roomName, user } = data;
 //     const roomIndex = findIndex(propEq('roomName', roomName))(rooms);
@@ -34,7 +35,7 @@ module.exports = Player;
 //     const isRoomDefined = !isNil(room);
 //     const allreadyInRoom = !isRoomDefined ? false : !isNil(find(propEq('name', user),room.users));
 //     const gameStarted = isRoomDefined ? room.isGameStarted : false;
-    
+
 //     if(fullRoom) {
 //         if(allreadyInRoom)
 //             emitToSocket(socket, GAME_ERROR, ALLREADY_IN_ROOM, `${user} is allready in this room !`)

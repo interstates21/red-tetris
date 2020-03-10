@@ -15,9 +15,13 @@ const Lobby = ({ onCreateRoom, rooms }) => {
       {nameReg.test(name) && (
         <div className={classes.box}>
           <div className={classes.rooms}>
-            {Object.keys(rooms).map(e => (
-              <h4 className={classes.room} key={e} onClick={() => enterRoom(e)}>
-                Room {e}
+            {rooms.map(e => (
+              <h4
+                className={classes.room}
+                key={e.id}
+                onClick={() => enterRoom(e.id)}
+              >
+                Room {e.id}{" "}
               </h4>
             ))}
           </div>
