@@ -7,8 +7,9 @@ const defaultPattern = require("../../config/defaultPattern");
 // };
 
 class Room {
-  constructor(host) {
+  constructor({ host, id }) {
     // this.eventListener = new EventListener(socket);
+    this.id = id;
     this.players = [host];
     this.ended = true;
     // this.players = [host];
@@ -17,11 +18,17 @@ class Room {
 
   join(player) {}
 
+  toObject() {
+    return {
+      post: this.pos,
+      id: this.id,
+      players: this.players.map(e => e.toObject())
+    };
+  }
+
   run() {
     this.ended = false;
   }
-
-  moveManager() {}
 }
 
 module.exports = Room;

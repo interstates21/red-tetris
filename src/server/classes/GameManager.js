@@ -34,8 +34,8 @@ class GameManager {
     this.io.emit(event, data);
   }
 
-  roomsToArray() {
-    return Object.keys(this.rooms).map(r => ({ id: r, data: {} }));
+  getRoomsArray() {
+    return Object.values(this.rooms).map(r => r.toObject());
   }
 
   run() {
@@ -56,18 +56,28 @@ class GameManager {
 
       socket.on(eventTypes.CREATE_ROOM, data => {
         this.clients.set(socket.id, { socket, name: data.name }); // identify a client
+
         const newRoomID = this.nRooms;
+
         const newPlayer = new Player({
           name: data.name,
           socket: this.clients.get(socket.id).socket
         });
-        this.rooms[newRoomID] = new Room(newPlayer);
+
+        const newRoom = new Room({ id: newRoomID, host: newPlayer });
+        this.rooms[newRoomID] = newRoom;
         this.nRooms++;
 
-        this.emitAllClients(eventTypes.CREATE_ROOM_SUCCESS, {
+        const rooms = this.getRoomsArray();
+        socket.broadcast.emit(eventTypes.CREATE_ROOM_SUCCESS, {
           message: "Room Successfully Created",
-          rooms: this.roomsToArray(this.rooms),
+          rooms,
           newRoomID
+        });
+
+        socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
+          currentRoom: newRoom.toObject(),
+          rooms
         });
       });
     });

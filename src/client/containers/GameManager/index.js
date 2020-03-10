@@ -42,8 +42,11 @@ export const StyledTetris = styled.div`
 const GameManager = ({ hashParams }) => {
   const [keyPressed] = useKey();
   const [rooms, setRooms] = useState([]);
+  const [currentRoom, setCurrentRoom] = useState(null);
   const [socket] = useSocket();
   const [pattern, setPattern] = useState(getDefaultPattern());
+
+  console.log("pattern", pattern);
 
   const isMovement = e => {
     return (
@@ -59,7 +62,13 @@ const GameManager = ({ hashParams }) => {
       return;
     }
     socket.on(eventTypes.CREATE_ROOM_SUCCESS, data => {
-      console.log("rooms = ", data);
+      console.log("CREATE_ROOM_SUCCESS = ", data);
+      setRooms(data.rooms);
+    });
+
+    socket.on(eventTypes.JOIN_ROOM_SUCCESS, data => {
+      console.log("JOIN_ROOM_SUCCESS = ", data);
+      setCurrentRoom(data.currentRoom);
       setRooms(data.rooms);
     });
   };
@@ -74,11 +83,11 @@ const GameManager = ({ hashParams }) => {
     socket.emit(eventTypes.CREATE_ROOM, { name });
   };
 
-  const joinRoom = ({ name, roomID }) => {
-    if (!socket) return;
-    console.log("socket = ", socket);
-    socket.emit(eventTypes.CREATE_ROOM, { name });
-  };
+  // const joinRoom = ({ name, roomID }) => {
+  //   if (!socket) return;
+  //   console.log("socket = ", socket);
+  //   socket.emit(eventTypes.CREATE_ROOM, { name });
+  // };
 
   useEffect(() => {
     if (!socket) return;
@@ -88,18 +97,17 @@ const GameManager = ({ hashParams }) => {
     }
   }, [keyPressed, socket]);
 
-  if (!hashParams) {
+  const startGame = () => {};
+
+  if (!hashParams && !currentRoom) {
     return <Lobby onCreateRoom={createRoom} rooms={rooms} />;
   }
-
-  const startGame = () => {};
 
   return (
     <StyledTetrisWrapper role="button" tabIndex="0">
       <div className={classes.game}>
         <Board stage={pattern} />
         <aside>
-          <Panel room={hashParams.room} player={hashParams.name} />
           <StartButton callback={startGame} />
         </aside>
       </div>

@@ -35,7 +35,7 @@
   justify-content: center;
   display: flex;
   font-weight: bold;
-  background: yellow;
+  background: floralwhite;
   transition: 800ms border;
   opacity: 0.9;
   cursor: pointer;
@@ -49,7 +49,7 @@
   border-radius: 2px;
   justify-content: center;
   display: flex;
-  color: yellow;
+  color: floralwhite;
   /* margin-top: 10px; */
   cursor: pointer;
   transition: 800ms border;
@@ -57,15 +57,15 @@
 
 .room:hover {
   opacity: 1;
-  background: yellow;
-  border-left: 12px solid yellow;
-  border-right: 12px solid yellow;
+  background: floralwhite;
+  border-left: 12px solid floralwhite;
+  border-right: 12px solid floralwhite;
 }
 
 .buttonNew:hover {
   opacity: 1;
-  border-left: 12px solid yellow;
-  border-right: 12px solid yellow;
+  border-left: 12px solid floralwhite;
+  border-right: 12px solid floralwhite;
 }
 
 .box {

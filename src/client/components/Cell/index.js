@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 // import { StyledCell } from "./styles";
-import { ITEMS } from "../../../config/Items";
+import ITEMS from "../../../config/Items";
 
 const StyledCell = styled.div`
   width: auto;
@@ -15,15 +15,13 @@ const StyledCell = styled.div`
 `;
 
 const Cell = ({ type }) => {
+  console.log("type = ", type);
+  console.log("Items = ", ITEMS);
   // const getColor = useCallback(() => {
   //   return n === 0 ? "red" : "black";
   // }, [n]);
 
-  return (
-    <StyledCell type={type} color={ITEMS[type].color}>
-      {console.log("rerender cell")}
-    </StyledCell>
-  );
+  return <StyledCell type={type} color={ITEMS[type].color}></StyledCell>;
   //<StyledCell opacity={n ? 0.7 : 0.2} color={getColor()} />;
 };
 

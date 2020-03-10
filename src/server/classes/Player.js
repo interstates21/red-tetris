@@ -14,6 +14,14 @@ class Player {
     this.rows = 0;
   }
 
+  toObject() {
+    return {
+      pos: this.pos,
+      id: this.socket.id,
+      name: this.name
+    };
+  }
+
   updatePos() {}
 
   drop() {

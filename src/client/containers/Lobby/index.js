@@ -12,7 +12,7 @@ const Lobby = ({ onCreateRoom, rooms }) => {
   return (
     <div className={classes.container}>
       <MyInput value={name} onChangeText={setName} name={"Username"} />
-      {nameReg.test(name) && (
+      {nameReg.test(name) ? (
         <div className={classes.box}>
           <div className={classes.rooms}>
             {rooms.map(e => (
@@ -31,6 +31,10 @@ const Lobby = ({ onCreateRoom, rooms }) => {
           >
             NEW ROOM
           </div>
+        </div>
+      ) : (
+        <div className="center full-size">
+          <h2 className="message">Please, choose a name </h2>
         </div>
       )}
     </div>
