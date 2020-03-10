@@ -1,5 +1,5 @@
 import React from "react";
-import GameManager from "./containers/GameManager";
+import ClientGameManager from "./containers/ClientGameManager";
 import useHashParams from "./hooks/useHashParams";
 
 const App = () => {
@@ -7,7 +7,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <GameManager hashParams={hashParams} />
+      <ClientGameManager hashParams={hashParams} />
     </div>
   );
 };

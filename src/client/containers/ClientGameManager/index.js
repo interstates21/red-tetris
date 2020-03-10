@@ -8,15 +8,6 @@ import eventTypes from "../../../config/socketEvents";
 import Lobby from "../Lobby";
 import StartButton from "../../components/StartButton";
 import styled from "styled-components";
-
-const Panel = ({ room, player }) => {
-  return (
-    <div>
-      <h4>{room}</h4> <h4>{player}</h4>
-    </div>
-  );
-};
-
 export const StyledTetrisWrapper = styled.div`
   width: 100vw;
   height: 100vh;
@@ -106,7 +97,12 @@ const GameManager = ({ hashParams }) => {
     socket.emit(eventTypes.JOIN_ROOM, { name, roomID });
   };
 
-  const startGame = () => {};
+  const startGame = () => {
+    console.log("Attempt to start the game", currentRoom);
+    const roomID = currentRoom.id;
+    if (!socket) return;
+    socket.emit(eventTypes.START_GAME, { roomID });
+  };
 
   if (!hashParams && !currentRoom) {
     return (

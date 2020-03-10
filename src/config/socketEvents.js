@@ -8,7 +8,8 @@ const eventTypes = {
   JOIN_ROOM_SUCCESS: "joinroomsuccess",
   TEST: "test",
   DISCONNECT: "disconnect",
-  NOTIFICATION: 'notification'
+  NOTIFICATION: "notification",
+  START_GAME: "startgame"
 };
 
 module.exports = eventTypes;

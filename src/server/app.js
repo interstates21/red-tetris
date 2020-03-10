@@ -1,4 +1,3 @@
-const eventTypes = require("../config/socketEvents");
 const GameManager = require("./classes/GameManager");
 
 class SocketIOServer {

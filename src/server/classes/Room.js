@@ -1,13 +1,7 @@
-const defaultPattern = require("../../config/defaultPattern");
-
-// const updatePattern = pattern => {
-//   pattern.unshift(pattern.pop());
-//   return pattern;
-// };
+const eventTypes = require("../../config/socketEvents");
 
 class Room {
   constructor({ host, id }) {
-    // this.eventListener = new EventListener(socket);
     this.id = id;
     this.players = [host];
     this.ended = true;
@@ -19,6 +13,10 @@ class Room {
     this.players.push(player);
   }
 
+  emitPlayers(event, data) {
+    this.players.forEach(p => p.emit(event, data));
+  }
+
   toObject() {
     return {
       post: this.pos,
@@ -27,8 +25,9 @@ class Room {
     };
   }
 
-  run() {
+  startGame() {
     this.ended = false;
+    this.emitPlayers(eventTypes.NOTIFICATION, { message: "The Game starts!" });
   }
 }
 

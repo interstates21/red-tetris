@@ -3,16 +3,10 @@ const Player = require("./Player");
 const defaultPattern = require("../../config/defaultPattern");
 const eventTypes = require("../../config/socketEvents");
 
-// const updatePattern = pattern => {
-//   pattern.unshift(pattern.pop());
-//   return pattern;
-// };
-
 class GameManager {
   constructor(io) {
     this.clients = new Map();
     this.io = io;
-    // this.eventListener = new EventListener(socket);
     this.pattern = defaultPattern();
     this.rooms = {};
     this.nRooms = 0;
@@ -20,7 +14,9 @@ class GameManager {
     this.dropTime = 1000;
   }
 
-  startGame(room) {}
+  startGame({ roomID }) {
+    this.rooms[roomID].startGame();
+  }
 
   moveManager({ socket, data }) {}
 
@@ -109,6 +105,11 @@ class GameManager {
       socket.on(eventTypes.JOIN_ROOM, data => {
         console.log("JOIN_ROOM", data);
         this.joinRoomManager({ socket, data });
+      });
+
+      socket.on(eventTypes.START_GAME, ({ roomID }) => {
+        console.log("START_GAME", roomID);
+        this.startGame({ socket, roomID });
       });
     });
   }
