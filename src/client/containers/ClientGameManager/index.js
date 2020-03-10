@@ -57,11 +57,18 @@ const GameManager = ({ hashParams }) => {
     });
 
     socket.on(eventTypes.GAME_UPDATE, data => {
-      const {rooms} = data;
-      console.log("GAME UPDATE = ", data);
+      const {rooms, currentRoom} = data;
+      console.log("GAME UPDATE = " + data.message, data);
       if (rooms) {
         setRooms(rooms);
       }
+      if (currentRoom) {
+        setCurrentRoom(currentRoom)
+      }
+    });
+
+    socket.on(eventTypes.ROOM_UPDATE, data => {
+      console.log("ROOM_UPDATE = " + data.message);
     });
   };
 

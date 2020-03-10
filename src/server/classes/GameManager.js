@@ -13,23 +13,41 @@ class GameManager {
 
   startGame({ roomID }) {
     console.log(`Starting Game in ${roomID}`, this.rooms);
+    this.io.emit(eventTypes.GAME_UPDATE, {
+      message: `Starting Game in ${roomID}`,
+      rooms: this.getRoomsArray()
+    });
     this.rooms[roomID].startGame();
   }
 
   clientManager({ socket }) {
-    console.info(`Client connected unknown id=${socket.id}`);
-    this.clients.set(socket.id, { socket, name: "unknown" });
+    this.clients.set(socket.id, { socket, name: "incognito", room: null });
+    console.info(`Client connected incognito id=${socket.id}`);
+
+    socket.emit(eventTypes.GAME_UPDATE, {
+      message: `You are connected!`,
+      rooms: this.getRoomsArray(),
+      currentRoom: null,
+    });
+  
     socket.on(eventTypes.DISCONNECT, () => {
-      //todo delete room
+      const client = this.clients.get(socket.id)
       console.info(
-        `Client gone [id=${socket.id} name=${this.clients[socket.id]}]`
+        `Client gone [id=${socket.id} name=${client.name}]`
       );
+      if (client.room) {
+        client.room.removePlayer(client.name);
+      }
+      this.io.emit(eventTypes.GAME_UPDATE, {
+        message: `Client gone [id=${socket.id} name=${client.name}]`,
+        rooms: this.getRoomsArray(),
+      });
+
       this.clients.delete(socket.id);
     });
   }
 
-  createRoomManager({ socket, data }) {
-    this.clients.set(socket.id, { socket, name: data.name }); // identify a client
+  createRoomManager({ socket, data }) { // identify a client
 
     const newRoomID = this.nRooms;
 
@@ -39,25 +57,24 @@ class GameManager {
     });
 
     const newRoom = new Room({ id: newRoomID, host: newPlayer });
+    this.clients.set(socket.id, { socket, name: data.name, room: newRoom });
     this.rooms[newRoomID] = newRoom;
     this.nRooms++;
 
-    const rooms = this.getRoomsArray();
 
     this.io.emit(eventTypes.GAME_UPDATE, {
       message: `${data.name} CREATES room ${newRoomID}`,
       newRoomID,
-      rooms
+      rooms: this.getRoomsArray(),
     });
 
+  
     socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
       currentRoom: newRoom.toObject(),
     });
   }
 
   joinRoomManager({ socket, data }) {
-    this.clients.set(socket.id, { socket, name: data.name }); // identify a client
-
     console.log(`${data.name} JOINS room ${data.roomID}`, data);
     const newPlayer = new Player({
       name: data.name,
@@ -66,6 +83,7 @@ class GameManager {
 
     // errors ///
     const currentRoom = this.rooms[data.roomID];
+    this.clients.set(socket.id, { socket, name: data.name, room: currentRoom });
     currentRoom.join(newPlayer);
     const rooms = this.getRoomsArray();
 

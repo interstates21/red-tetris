@@ -10,6 +10,7 @@ const eventTypes = {
   DISCONNECT: "disconnect",
   START_GAME: "startgame",
   GAME_UPDATE: "gameupdate",
+  ROOM_UPDATE: "roomupdate",
   GAME_ERROR: 'fameerror'
 };
 

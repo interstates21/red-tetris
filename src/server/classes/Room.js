@@ -29,6 +29,20 @@ class Room {
     };
   }
 
+  removePlayer(name) {
+    this.emitPlayers(eventTypes.ROOM_UPDATE, { message: `Player ${name} is gone` });
+    this.players = this.players.filter((p, index) => {
+      if (index === 0 && p.name === name) {
+        this.destructor();
+      }
+      return p.name !== name
+    });
+  }
+
+  destructor() {
+    console.log("Destruct!");
+  }
+
   eventListener() {
     this.players.forEach(p => {
       p.socket.on(eventTypes.MOVEMENT, ({key}) => {
@@ -43,7 +57,7 @@ class Room {
 
   startGame() {
     this.started = true;
-    this.emitPlayers(eventTypes.GAME_UPDATE, { message: "The Game starts!" });
+    this.emitPlayers(eventTypes.ROOM_UPDATE, { message: "The Game starts!" });
     this.eventListener();
   }
 }
