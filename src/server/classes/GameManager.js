@@ -11,6 +11,30 @@ class GameManager {
     this.nRooms = 0;
   }
 
+
+  emitError(socket, message) {
+    socket.emit(eventTypes.GAME_ERROR, {
+      message,
+      rooms: this.getRoomsArray()
+    });
+  }
+
+  emitUpdateAll(message, payload={}) {
+    this.io.emit(eventTypes.GAME_UPDATE, {
+      message: message,
+      rooms: this.getRoomsArray(),
+      ...payload
+    });
+  }
+
+  emitUpdateUser(socket, message, payload={}) {
+    socket.emit(eventTypes.GAME_UPDATE, {
+      message: message,
+      rooms: this.getRoomsArray(),
+      ...payload
+    });
+  }
+
   startGame({ roomID }) {
     console.log(`Starting Game in ${roomID}`, this.rooms);
     this.io.emit(eventTypes.GAME_UPDATE, {
@@ -24,11 +48,7 @@ class GameManager {
     this.clients.set(socket.id, { socket, name: "incognito", room: null });
     console.info(`Client connected incognito id=${socket.id}`);
 
-    socket.emit(eventTypes.GAME_UPDATE, {
-      message: `You are connected!`,
-      rooms: this.getRoomsArray(),
-      currentRoom: null,
-    });
+    this.emitUpdateUser(socket, `You are connected!`, {currentRoom: null});
   
     socket.on(eventTypes.DISCONNECT, () => {
       const client = this.clients.get(socket.id)
@@ -38,11 +58,8 @@ class GameManager {
       if (client.room) {
         client.room.removePlayer(client.name);
       }
-      this.io.emit(eventTypes.GAME_UPDATE, {
-        message: `Client gone [id=${socket.id} name=${client.name}]`,
-        rooms: this.getRoomsArray(),
-      });
 
+      this.emitUpdateAll(`Client gone [id=${socket.id} name=${client.name}]`);
       this.clients.delete(socket.id);
     });
   }
@@ -51,10 +68,15 @@ class GameManager {
 
     const newRoomID = this.nRooms;
 
+    if (this.duplicateUserExists(socket, data.name)) {
+      return ;
+    }
+
     const newPlayer = new Player({
       name: data.name,
       socket: this.clients.get(socket.id).socket
     });
+
 
     const newRoom = new Room({ id: newRoomID, host: newPlayer });
     this.clients.set(socket.id, { socket, name: data.name, room: newRoom });
@@ -62,36 +84,41 @@ class GameManager {
     this.nRooms++;
 
 
-    this.io.emit(eventTypes.GAME_UPDATE, {
-      message: `${data.name} CREATES room ${newRoomID}`,
-      newRoomID,
-      rooms: this.getRoomsArray(),
-    });
-
-  
+    this.emitUpdateAll(`${data.name} CREATES room ${newRoomID}`, {newRoomID});  
     socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
       currentRoom: newRoom.toObject(),
     });
   }
 
+
+  duplicateUserExists (socket, name)  {
+    this.clients.forEach((client) => {
+      if (client.name === name) {
+        console.log("duplicate!!!");
+        this.emitError(socket, "The username exists :(");
+        return (true);
+      }
+    })
+
+    return (false)
+  }
+
+
   joinRoomManager({ socket, data }) {
-    console.log(`${data.name} JOINS room ${data.roomID}`, data);
     const newPlayer = new Player({
       name: data.name,
       socket: this.clients.get(socket.id).socket
     });
-
-    // errors ///
+    
+    // errors //
     const currentRoom = this.rooms[data.roomID];
+    if (this.duplicateUserExists(socket, data.name)) {
+      return ;
+    }
     this.clients.set(socket.id, { socket, name: data.name, room: currentRoom });
     currentRoom.join(newPlayer);
     const rooms = this.getRoomsArray();
-
-    this.io.emit(eventTypes.GAME_UPDATE, {
-      message: `${data.name} joins room ${data.roomID}`,
-      rooms
-    });
-
+    this.emitUpdateAll(`${data.name} joins room ${data.roomID}`);
     socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
       currentRoom: currentRoom.toObject(),
     });

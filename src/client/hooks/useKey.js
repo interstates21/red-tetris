@@ -4,7 +4,7 @@ const useKey = () => {
     const [key, setKey] = useState(null);
   
     const handler = (event) => {
-      setKey(event.key);
+      setKey(() => event.key);
     }
     useEffect(() => {
       window.addEventListener('keydown', handler);

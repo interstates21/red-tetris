@@ -58,13 +58,22 @@ const GameManager = ({ hashParams }) => {
 
     socket.on(eventTypes.GAME_UPDATE, data => {
       const {rooms, currentRoom} = data;
-      console.log("GAME UPDATE = " + data.message, data);
+      console.log(data.message, data);
       if (rooms) {
         setRooms(rooms);
       }
       if (currentRoom) {
         setCurrentRoom(currentRoom)
       }
+    });
+
+    socket.on(eventTypes.GAME_ERROR, data => {
+      const {rooms} = data;
+      console.log(data.message, data);
+      if (rooms) {
+        setRooms(rooms);
+      }
+      setCurrentRoom(null)
     });
 
     socket.on(eventTypes.ROOM_UPDATE, data => {
@@ -108,7 +117,7 @@ const GameManager = ({ hashParams }) => {
     socket.emit(eventTypes.START_GAME, { roomID });
   };
 
-  if (!hashParams && !currentRoom) {
+  if (!currentRoom) {
     return (
       <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} rooms={rooms} />
     );
