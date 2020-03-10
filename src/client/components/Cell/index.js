@@ -15,8 +15,6 @@ const StyledCell = styled.div`
 `;
 
 const Cell = ({ type }) => {
-  console.log("type = ", type);
-  console.log("Items = ", ITEMS);
   // const getColor = useCallback(() => {
   //   return n === 0 ? "red" : "black";
   // }, [n]);

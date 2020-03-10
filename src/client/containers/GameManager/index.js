@@ -46,16 +46,13 @@ const GameManager = ({ hashParams }) => {
   const [socket] = useSocket();
   const [pattern, setPattern] = useState(getDefaultPattern());
 
-  console.log("pattern", pattern);
+  useEffect(() => {
+    eventListener();
+  }, [socket]);
 
-  const isMovement = e => {
-    return (
-      e === "ArrowLeft" ||
-      e === "ArrowRight" ||
-      e === "ArrowUp" ||
-      e === "ArrowDown"
-    );
-  };
+  useEffect(() => {
+    eventDispatcher();
+  }, [keyPressed, socket]);
 
   const eventListener = () => {
     if (!socket) {
@@ -71,36 +68,50 @@ const GameManager = ({ hashParams }) => {
       setCurrentRoom(data.currentRoom);
       setRooms(data.rooms);
     });
+
+    socket.on(eventTypes.NOTIFICATION, ({ message, ...rest }) => {
+      console.log("NOTIFICATION = ", message);
+      if (rest.rooms) {
+        setRooms(rooms);
+      }
+    });
   };
 
-  useEffect(() => {
-    eventListener();
-  }, [socket]);
-
-  const createRoom = ({ name }) => {
+  const eventDispatcher = () => {
     if (!socket) return;
-    console.log("socket = ", socket);
-    socket.emit(eventTypes.CREATE_ROOM, { name });
-  };
 
-  // const joinRoom = ({ name, roomID }) => {
-  //   if (!socket) return;
-  //   console.log("socket = ", socket);
-  //   socket.emit(eventTypes.CREATE_ROOM, { name });
-  // };
-
-  useEffect(() => {
-    if (!socket) return;
     if (isMovement(keyPressed)) {
       console.log("keyPressed = ", keyPressed);
       socket.emit(eventTypes.MOVEMENT, { key: keyPressed });
     }
-  }, [keyPressed, socket]);
+  };
+
+  const isMovement = e => {
+    return (
+      e === "ArrowLeft" ||
+      e === "ArrowRight" ||
+      e === "ArrowUp" ||
+      e === "ArrowDown"
+    );
+  };
+
+  const createRoom = ({ name }) => {
+    if (!socket) return;
+    socket.emit(eventTypes.CREATE_ROOM, { name });
+  };
+
+  const joinRoom = ({ name, roomID }) => {
+    if (!socket) return;
+    console.log(`Attempt to join room ${roomID}`);
+    socket.emit(eventTypes.JOIN_ROOM, { name, roomID });
+  };
 
   const startGame = () => {};
 
   if (!hashParams && !currentRoom) {
-    return <Lobby onCreateRoom={createRoom} rooms={rooms} />;
+    return (
+      <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} rooms={rooms} />
+    );
   }
 
   return (

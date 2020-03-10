@@ -1,4 +1,3 @@
-const EventListener = require("./EventListener");
 const defaultPattern = require("../../config/defaultPattern");
 
 // const updatePattern = pattern => {
@@ -16,7 +15,9 @@ class Room {
     this.dropTime = 1000;
   }
 
-  join(player) {}
+  join(player) {
+    this.players.push(player);
+  }
 
   toObject() {
     return {
