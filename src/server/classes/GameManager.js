@@ -17,14 +17,14 @@ class GameManager {
     });
   }
 
-  // emitUpdateAll(message, payload = {}) {
-  //   // todo ::: broadcast!!!
-  //   this.io.emit(eventTypes.GAME_UPDATE, {
-  //     message: message,
-  //     rooms: this.getRoomsArray(),
-  //     ...payload
-  //   });
-  // }
+  emitUpdateAll(message, payload = {}) {
+    // todo ::: broadcast!!!
+    this.io.emit(eventTypes.GAME_UPDATE, {
+      message: message,
+      rooms: this.getRoomsArray(),
+      ...payload
+    });
+  }
 
   broadcastUpdate(socket, message, payload = {}) {
     // todo ::: broadcast!!!
@@ -49,6 +49,13 @@ class GameManager {
     this.rooms[roomID].startGame();
   }
 
+  checkAndDeleteRoom(room) {
+    if (room.isEmpty()) {
+      delete this.rooms[room.id];
+      this.emitUpdateAll(`The room ${room.id} has gone`);
+    }
+  }
+
   clientManager({ socket }) {
     this.clients.set(socket.id, { socket, name: "incognito", room: null });
     console.info(`Client connected incognito id=${socket.id}`);
@@ -60,6 +67,7 @@ class GameManager {
       console.info(`Client gone [id=${socket.id} name=${client.name}]`);
       if (client.room) {
         client.room.removePlayer(client.name);
+        this.checkAndDeleteRoom(client.room);
       }
 
       this.broadcastUpdate(

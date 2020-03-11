@@ -57,27 +57,33 @@ const GameManager = ({ hashParams }) => {
     });
 
     socket.on(eventTypes.GAME_UPDATE, data => {
-      const {rooms, currentRoom} = data;
+      const { rooms, currentRoom: curr } = data;
       console.log(data.message, data);
       if (rooms) {
         setRooms(rooms);
       }
-      if (currentRoom) {
-        setCurrentRoom(currentRoom)
+      if (curr !== undefined) {
+        setCurrentRoom(curr);
       }
     });
 
     socket.on(eventTypes.GAME_ERROR, data => {
-      const {rooms} = data;
+      const { rooms } = data;
       console.log(data.message, data);
       if (rooms) {
         setRooms(rooms);
       }
-      setCurrentRoom(null)
+      setCurrentRoom(null);
     });
 
     socket.on(eventTypes.ROOM_UPDATE, data => {
-      console.log("ROOM_UPDATE = " + data.message);
+      console.log(data.message, data);
+      if (data.rooms) {
+        setRooms(data.rooms);
+      }
+      if (data.currentRoom !== undefined) {
+        setCurrentRoom(currentRoom);
+      }
     });
   };
 
@@ -117,6 +123,7 @@ const GameManager = ({ hashParams }) => {
     socket.emit(eventTypes.START_GAME, { roomID });
   };
 
+  console.log("cuurentRoom", currentRoom);
   if (!currentRoom) {
     return (
       <Lobby onCreateRoom={createRoom} onJoinRoom={joinRoom} rooms={rooms} />
