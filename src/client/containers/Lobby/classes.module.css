@@ -10,11 +10,11 @@
 
 .title {
   color: white;
-  font-size: 10px;
+  font-size: 12px;
 }
 .rooms {
   margin-top: 10px;
-  width: 60%;
+  width: 100%;
   padding-top: 0;
   padding: 10px;
   border-radius: 3px;
@@ -25,60 +25,61 @@
 }
 
 .room {
-  /* width: 100%; */
-  flex: 1;
-  width: 400px;
+  width: 85%;
   margin: 3px;
-  min-height: 50px;
+  height: 20px;
+  font-size: 14px;
   align-items: center;
   border-radius: 2px;
   justify-content: center;
   display: flex;
   font-weight: bold;
-  background: #0026ca;
+  background: #ff6701;
   transition: 800ms border;
-  opacity: 0.7ls;
+  opacity: 0.7;
   cursor: pointer;
 }
 
 .buttonNew {
   font-weight: bold;
-  height: 50px;
-  width: 400px;
+  height: 20px;
   align-items: center;
+  width: 100%;
+  font-size: 14px;
   border-radius: 2px;
   justify-content: center;
   display: flex;
-  color: #0026ca;
+  color: #ff6701;
   /* margin-top: 10px; */
   cursor: pointer;
   transition: 800ms background-color;
-  transition: 800ms color;
+  transition: 1200ms color;
 }
 
 .room:hover {
   opacity: 1;
-  background: #0026ca;
-  border-left: 12px solid #0026ca;
-  border-right: 12px solid #0026ca;
+  background: #ff6701;
+  border-right: 12px solid #ff6701;
+  /* border-left: 12px solid #0026c&a; */
+  border-left: 12px solid #ff6701;
 }
 
 .buttonNew:hover {
   opacity: 1;
   color: black;
-  background-color: #0026ca;
+  background-color: #ff6701;
 }
 
 .box {
+  width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.ghostContainer {
-  width: 100%;
-  background: #0026ca;
+.roomContainer {
+  background: #ff6701;
   align-items: center;
   display: flex;
 }

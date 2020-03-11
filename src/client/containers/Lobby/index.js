@@ -86,22 +86,20 @@ const Lobby = ({ onCreateRoom, onJoinRoom, rooms }) => {
         <div className={classes.box}>
           <div className={classes.rooms}>
             {rooms.map(e => (
-              <div className={classes.roomContainer}>
-                <h4
-                  className={classes.room}
-                  key={e.id}
-                  onClick={() => enterRoom(e)}
-                >
-                  Room {e.id}
-                </h4>
-              </div>
+              <h4
+                className={classes.room}
+                key={e.id}
+                onClick={() => enterRoom(e)}
+              >
+                Room {e.id}
+              </h4>
             ))}
           </div>
           <div
             className={classes.buttonNew}
             onClick={() => onCreateRoom({ name })}
           >
-            NEW ROOM
+            Create
           </div>
         </div>
       ) : (

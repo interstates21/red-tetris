@@ -2,7 +2,7 @@
   /* padding: 30px; */
   width: 400px;
   height: 40px;
-  border-bottom: 6px #FF6701 solid;
+  border-bottom: 3px #FF6701 solid;
 }
 
 .input {
@@ -10,7 +10,7 @@
   border: none;
   width: 100%;
   color: #FF6701;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   height: 100%;
   display: flex;
