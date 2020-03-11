@@ -2,15 +2,14 @@
   /* padding: 30px; */
   width: 400px;
   height: 40px;
-  border-radius: 4px;
-  border: 2px floralwhite solid;
+  border-bottom: 6px #FF6701 solid;
 }
 
 .input {
   background: none;
   border: none;
   width: 100%;
-  color: floralwhite;
+  color: #FF6701;
   font-size: 14px;
   font-weight: bold;
   height: 100%;
@@ -21,5 +20,5 @@
 }
 
 .input::placeholder {
-  color: floralwhite;
+  color: #FF6701;
 }

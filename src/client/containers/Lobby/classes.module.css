@@ -35,9 +35,9 @@
   justify-content: center;
   display: flex;
   font-weight: bold;
-  background: floralwhite;
+  background: #0026ca;
   transition: 800ms border;
-  opacity: 0.9;
+  opacity: 0.7ls;
   cursor: pointer;
 }
 
@@ -49,23 +49,24 @@
   border-radius: 2px;
   justify-content: center;
   display: flex;
-  color: floralwhite;
+  color: #0026ca;
   /* margin-top: 10px; */
   cursor: pointer;
-  transition: 800ms border;
+  transition: 800ms background-color;
+  transition: 800ms color;
 }
 
 .room:hover {
   opacity: 1;
-  background: floralwhite;
-  border-left: 12px solid floralwhite;
-  border-right: 12px solid floralwhite;
+  background: #0026ca;
+  border-left: 12px solid #0026ca;
+  border-right: 12px solid #0026ca;
 }
 
 .buttonNew:hover {
   opacity: 1;
-  border-left: 12px solid floralwhite;
-  border-right: 12px solid floralwhite;
+  color: black;
+  background-color: #0026ca;
 }
 
 .box {
@@ -73,4 +74,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.ghostContainer {
+  width: 100%;
+  background: #0026ca;
+  align-items: center;
+  display: flex;
 }

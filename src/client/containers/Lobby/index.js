@@ -59,9 +59,9 @@ const randomName = () => {
     "Plane",
     "Warrior",
     "Dragon",
-    'Chicken',
-    'Cat',
-    'Delta',
+    "Chicken",
+    "Cat",
+    "Delta"
   ];
 
   return (
@@ -86,13 +86,15 @@ const Lobby = ({ onCreateRoom, onJoinRoom, rooms }) => {
         <div className={classes.box}>
           <div className={classes.rooms}>
             {rooms.map(e => (
-              <h4
-                className={classes.room}
-                key={e.id}
-                onClick={() => enterRoom(e)}
-              >
-                Room {e.id}{" "}
-              </h4>
+              <div className={classes.roomContainer}>
+                <h4
+                  className={classes.room}
+                  key={e.id}
+                  onClick={() => enterRoom(e)}
+                >
+                  Room {e.id}
+                </h4>
+              </div>
             ))}
           </div>
           <div
