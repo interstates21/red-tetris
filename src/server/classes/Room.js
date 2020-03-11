@@ -30,7 +30,7 @@ class Room {
   }
 
   removePlayer(name) {
-    this.emitPlayers(eventTypes.ROOM_UPDATE, { message: `Player ${name} is gone` });
+    this.emitPlayers(eventTypes.ROOM_UPDATE, { message: `Player ${name} leaves the room` });
     this.players = this.players.filter((p, index) => {
       if (index === 0 && p.name === name) {
         this.destructor();

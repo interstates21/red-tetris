@@ -17,9 +17,18 @@ class GameManager {
     });
   }
 
-  emitUpdateAll(message, payload = {}) {
+  // emitUpdateAll(message, payload = {}) {
+  //   // todo ::: broadcast!!!
+  //   this.io.emit(eventTypes.GAME_UPDATE, {
+  //     message: message,
+  //     rooms: this.getRoomsArray(),
+  //     ...payload
+  //   });
+  // }
+
+  broadcastUpdate(socket, message, payload = {}) {
     // todo ::: broadcast!!!
-    this.io.emit(eventTypes.GAME_UPDATE, {
+    socket.broadcast.emit(eventTypes.GAME_UPDATE, {
       message: message,
       rooms: this.getRoomsArray(),
       ...payload
@@ -53,7 +62,10 @@ class GameManager {
         client.room.removePlayer(client.name);
       }
 
-      this.emitUpdateAll(`Client gone [id=${socket.id} name=${client.name}]`);
+      this.broadcastUpdate(
+        socket,
+        `Client gone [id=${socket.id} name=${client.name}]`
+      );
       this.clients.delete(socket.id);
     });
   }
@@ -64,6 +76,7 @@ class GameManager {
     const newRoomID = this.nRooms;
 
     if (this.duplicateUserExists(socket, data.name)) {
+      console.log("duplicate!!!");
       return;
     }
 
@@ -77,22 +90,24 @@ class GameManager {
     this.rooms[newRoomID] = newRoom;
     this.nRooms++;
 
-    this.emitUpdateAll(`${data.name} CREATES room ${newRoomID}`, { newRoomID });
-    socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
+    this.broadcastUpdate(socket, `${data.name} CREATES room ${newRoomID}`, {
+      newRoomID
+    });
+    this.emitUpdateUser(socket, "Room Joined!", {
       currentRoom: newRoom.toObject()
     });
   }
 
   duplicateUserExists(socket, name) {
+    let res = false;
     this.clients.forEach(client => {
       if (client.name === name) {
-        console.log("duplicate!!!");
         this.emitError(socket, "The username exists :(");
-        return true;
+        res = true;
       }
     });
 
-    return false;
+    return res;
   }
 
   joinRoomManager({ socket, data }) {
@@ -104,12 +119,13 @@ class GameManager {
     // errors //
     const currentRoom = this.rooms[data.roomID];
     if (this.duplicateUserExists(socket, data.name)) {
+      console.log("duplicate name " + data.name);
       return;
     }
     this.clients.set(socket.id, { socket, name: data.name, room: currentRoom });
     currentRoom.join(newPlayer);
-    this.emitUpdateAll(`${data.name} joins room ${data.roomID}`);
-    socket.emit(eventTypes.JOIN_ROOM_SUCCESS, {
+    this.broadcastUpdate(socket, `${data.name} joins room ${data.roomID}`);
+    this.emitUpdateUser(socket, "Room Joined!", {
       currentRoom: currentRoom.toObject()
     });
   }
