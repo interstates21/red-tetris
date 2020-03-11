@@ -44,9 +44,9 @@ class GameManager {
   }
 
   startGame({ roomID }) {
+    this.rooms[roomID].startGame();
     console.log(`Starting Game in ${roomID}`, this.rooms);
     this.emitUpdateAll(`Starting Game in ${roomID}`);
-    this.rooms[roomID].startGame();
   }
 
   checkAndDeleteRoom(room) {

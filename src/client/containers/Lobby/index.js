@@ -74,9 +74,9 @@ const randomName = () => {
 const Lobby = ({ onCreateRoom, onJoinRoom, rooms }) => {
   const [name, setName] = useState(randomName());
   const nameReg = /^[a-zA-Z0-9]+$/;
-  const enterRoom = roomID => {
-    window.location.replace(`/#${roomID}[${name}]`);
-    onJoinRoom({ name, roomID });
+
+  const enterRoom = room => {
+    onJoinRoom({ name, room });
   };
 
   return (
@@ -89,7 +89,7 @@ const Lobby = ({ onCreateRoom, onJoinRoom, rooms }) => {
               <h4
                 className={classes.room}
                 key={e.id}
-                onClick={() => enterRoom(e.id)}
+                onClick={() => enterRoom(e)}
               >
                 Room {e.id}{" "}
               </h4>

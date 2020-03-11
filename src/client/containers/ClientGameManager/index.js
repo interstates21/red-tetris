@@ -110,10 +110,15 @@ const GameManager = ({ hashParams }) => {
     socket.emit(eventTypes.CREATE_ROOM, { name });
   };
 
-  const joinRoom = ({ name, roomID }) => {
+  const joinRoom = ({ name, room }) => {
     if (!socket) return;
-    console.log(`Attempt to join room ${roomID}`);
-    socket.emit(eventTypes.JOIN_ROOM, { name, roomID });
+    if (room.started) {
+      alert(`The Game in room ${room.id} has already started :()`);
+      return;
+    }
+    // window.location.replace(`/#${room.id}[${name}]`);
+    console.log(`Attempt to join room ${room.id}`);
+    socket.emit(eventTypes.JOIN_ROOM, { name, roomID: room.id });
   };
 
   const startGame = () => {
